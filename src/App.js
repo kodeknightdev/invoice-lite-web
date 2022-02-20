@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import ClientsPage from './pages/ClientsPage';
 import ClientFormPage from './pages/ClientFormPage';
+import ClientDetailPage from './pages/ClientDetailPage';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Route path="clients" element={<ClientsPage />} />
         <Route path="clients/new" element={<ClientFormPage />} />
         <Route path="clients/:id/edit" element={<ClientFormPage />} />
+        <Route path="clients/:id" element={<ClientDetailPage />} />
       </Route>
     </Routes>
   );
