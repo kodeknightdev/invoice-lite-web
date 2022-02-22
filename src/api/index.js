@@ -9,3 +9,8 @@ export const clientsApi = {
   update: (id, client) => http.put(`/api/clients/${id}`, client).then(data),
   remove: (id) => http.delete(`/api/clients/${id}`),
 };
+
+export const invoicesApi = {
+  list: () => http.get('/api/invoices').then(data),
+  get: (id) => http.get(`/api/invoices/${id}`).then(data),
+};

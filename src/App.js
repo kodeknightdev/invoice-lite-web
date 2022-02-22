@@ -3,6 +3,7 @@ import Layout from './components/Layout';
 import ClientsPage from './pages/ClientsPage';
 import ClientFormPage from './pages/ClientFormPage';
 import ClientDetailPage from './pages/ClientDetailPage';
+import InvoicesPage from './pages/InvoicesPage';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="clients/new" element={<ClientFormPage />} />
         <Route path="clients/:id/edit" element={<ClientFormPage />} />
         <Route path="clients/:id" element={<ClientDetailPage />} />
+        <Route path="invoices" element={<InvoicesPage />} />
       </Route>
     </Routes>
   );
