@@ -13,4 +13,6 @@ export const clientsApi = {
 export const invoicesApi = {
   list: () => http.get('/api/invoices').then(data),
   get: (id) => http.get(`/api/invoices/${id}`).then(data),
+  create: (invoice) => http.post('/api/invoices', invoice).then(data),
+  update: (id, invoice) => http.put(`/api/invoices/${id}`, invoice).then(data),
 };
