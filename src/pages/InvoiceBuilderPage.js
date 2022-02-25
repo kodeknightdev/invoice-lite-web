@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { clientsApi, invoicesApi } from '../api';
 import LineItemsEditor from '../components/LineItemsEditor';
+import { formatMoney, invoiceTotal } from '../utils/money';
 
 const CURRENCIES = ['usd', 'eur', 'gbp', 'cad'];
 
@@ -109,7 +110,14 @@ export default function InvoiceBuilderPage() {
         </label>
       </div>
 
-      <LineItemsEditor items={form.lineItems} onChange={(items) => update('lineItems', items)} />
+      <LineItemsEditor
+        items={form.lineItems}
+        currency={form.currency}
+        onChange={(items) => update('lineItems', items)}
+      />
+      <p className="total">
+        Total <strong>{formatMoney(invoiceTotal(form.lineItems), form.currency)}</strong>
+      </p>
 
       <label>
         Notes

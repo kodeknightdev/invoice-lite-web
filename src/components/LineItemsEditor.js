@@ -1,6 +1,8 @@
+import { formatMoney, lineAmount } from '../utils/money';
+
 const emptyItem = () => ({ description: '', quantity: 1, unitPrice: 0 });
 
-export default function LineItemsEditor({ items, onChange }) {
+export default function LineItemsEditor({ items, currency, onChange }) {
   function updateItem(index, field, value) {
     onChange(items.map((item, i) => (i === index ? { ...item, [field]: value } : item)));
   }
@@ -20,6 +22,7 @@ export default function LineItemsEditor({ items, onChange }) {
           <th>Description</th>
           <th>Qty</th>
           <th>Unit price</th>
+          <th className="num">Amount</th>
           <th />
         </tr>
       </thead>
@@ -51,6 +54,7 @@ export default function LineItemsEditor({ items, onChange }) {
                 onChange={(e) => updateItem(index, 'unitPrice', e.target.value)}
               />
             </td>
+            <td className="num">{formatMoney(lineAmount(item), currency)}</td>
             <td>
               <button
                 type="button"
@@ -66,7 +70,7 @@ export default function LineItemsEditor({ items, onChange }) {
       </tbody>
       <tfoot>
         <tr>
-          <td colSpan={4}>
+          <td colSpan={5}>
             <button type="button" className="btn" onClick={addItem}>
               Add line
             </button>
