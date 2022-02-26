@@ -15,4 +15,8 @@ export const invoicesApi = {
   get: (id) => http.get(`/api/invoices/${id}`).then(data),
   create: (invoice) => http.post('/api/invoices', invoice).then(data),
   update: (id, invoice) => http.put(`/api/invoices/${id}`, invoice).then(data),
+  remove: (id) => http.delete(`/api/invoices/${id}`),
+  send: (id) => http.post(`/api/invoices/${id}/send`).then(data),
+  markPaid: (id) => http.post(`/api/invoices/${id}/mark-paid`).then(data),
+  voidInvoice: (id) => http.post(`/api/invoices/${id}/void`).then(data),
 };
