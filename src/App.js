@@ -6,6 +6,7 @@ import ClientDetailPage from './pages/ClientDetailPage';
 import InvoicesPage from './pages/InvoicesPage';
 import InvoiceBuilderPage from './pages/InvoiceBuilderPage';
 import InvoiceDetailPage from './pages/InvoiceDetailPage';
+import CheckoutPage from './pages/CheckoutPage';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="invoices/new" element={<InvoiceBuilderPage />} />
         <Route path="invoices/:id/edit" element={<InvoiceBuilderPage />} />
         <Route path="invoices/:id" element={<InvoiceDetailPage />} />
+        <Route path="invoices/:id/pay" element={<CheckoutPage />} />
       </Route>
     </Routes>
   );

@@ -60,8 +60,13 @@ export default function InvoiceDetailPage() {
             </button>
           )}
           {isSent && (
+            <Link className="btn primary" to={`/invoices/${id}/pay`}>
+              Pay by card (test)
+            </Link>
+          )}
+          {isSent && (
             <button className="btn" disabled={busy} onClick={() => runAction(invoicesApi.markPaid)}>
-              Mark paid
+              Mark paid manually
             </button>
           )}
           {(isDraft || isSent) && (

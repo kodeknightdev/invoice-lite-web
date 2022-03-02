@@ -265,3 +265,16 @@ button.link {
   white-space: pre-wrap;
   color: var(--muted);
 }
+
+.hint {
+  font-size: 0.85rem;
+  color: var(--muted);
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: var(--radius);
+  padding: 0.5rem 0.75rem;
+}
+
+.checkout-actions {
+  margin-top: 1rem;
+}

@@ -20,3 +20,7 @@ export const invoicesApi = {
   markPaid: (id) => http.post(`/api/invoices/${id}/mark-paid`).then(data),
   voidInvoice: (id) => http.post(`/api/invoices/${id}/void`).then(data),
 };
+
+export const paymentsApi = {
+  createIntent: (invoiceId) => http.post(`/api/invoices/${invoiceId}/payment-intent`).then(data),
+};
