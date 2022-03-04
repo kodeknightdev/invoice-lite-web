@@ -278,3 +278,13 @@ button.link {
 .checkout-actions {
   margin-top: 1rem;
 }
+
+.auth-page {
+  display: flex;
+  justify-content: center;
+  padding-top: 10vh;
+}
+
+.auth-page .card {
+  width: 100%;
+}

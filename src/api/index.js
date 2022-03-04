@@ -2,6 +2,11 @@ import http from './http';
 
 const data = (response) => response.data;
 
+export const authApi = {
+  login: (credentials) => http.post('/api/auth/login', credentials).then(data),
+  register: (details) => http.post('/api/auth/register', details).then(data),
+};
+
 export const clientsApi = {
   list: () => http.get('/api/clients').then(data),
   get: (id) => http.get(`/api/clients/${id}`).then(data),
