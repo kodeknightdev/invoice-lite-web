@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import { authApi } from '../api';
 import { useAuth } from '../auth/AuthContext';
 
 export default function LoginPage() {
-  const navigate = useNavigate();
-  const { signIn } = useAuth();
+  const location = useLocation();
+  const { token, signIn } = useAuth();
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
@@ -20,12 +20,13 @@ export default function LoginPage() {
     setError(null);
     try {
       signIn(await authApi.login(form));
-      navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || 'Could not sign in.');
       setSubmitting(false);
     }
   }
+
+  if (token) return <Navigate to={location.state?.from?.pathname || '/'} replace />;
 
   return (
     <div className="auth-page">

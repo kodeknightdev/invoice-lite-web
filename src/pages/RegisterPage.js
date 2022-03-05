@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { authApi } from '../api';
 import { useAuth } from '../auth/AuthContext';
 
 export default function RegisterPage() {
-  const navigate = useNavigate();
-  const { signIn } = useAuth();
+  const { token, signIn } = useAuth();
   const [form, setForm] = useState({ displayName: '', email: '', password: '' });
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
@@ -20,12 +19,13 @@ export default function RegisterPage() {
     setError(null);
     try {
       signIn(await authApi.register(form));
-      navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || 'Could not create your account.');
       setSubmitting(false);
     }
   }
+
+  if (token) return <Navigate to="/" replace />;
 
   return (
     <div className="auth-page">
