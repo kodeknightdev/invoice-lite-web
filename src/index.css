@@ -288,3 +288,14 @@ button.link {
 .auth-page .card {
   width: 100%;
 }
+
+.topbar .user {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  color: #d1d5db;
+}
+
+.topbar .user button.link {
+  color: #93c5fd;
+}
