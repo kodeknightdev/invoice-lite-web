@@ -5,9 +5,14 @@ const http = axios.create({
 });
 
 let authToken = null;
+let onUnauthorized = null;
 
 export function setAuthToken(token) {
   authToken = token;
+}
+
+export function setUnauthorizedHandler(handler) {
+  onUnauthorized = handler;
 }
 
 http.interceptors.request.use((config) => {
@@ -18,9 +23,7 @@ http.interceptors.request.use((config) => {
 http.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401 && window.location.pathname !== '/login') {
-      window.location.assign('/login');
-    }
+    if (error.response?.status === 401 && onUnauthorized) onUnauthorized();
     return Promise.reject(error);
   }
 );

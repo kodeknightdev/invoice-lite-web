@@ -1,5 +1,5 @@
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
-import { setAuthToken } from '../api/http';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { setAuthToken, setUnauthorizedHandler } from '../api/http';
 
 const STORAGE_KEY = 'invoice-lite.auth';
 
@@ -32,6 +32,13 @@ export function AuthProvider({ children }) {
     setAuthToken(null);
     setAuth(null);
   }, []);
+
+  // An expired or revoked token comes back as 401: drop it so RequireAuth
+  // sends the user to the login page.
+  useEffect(() => {
+    setUnauthorizedHandler(signOut);
+    return () => setUnauthorizedHandler(null);
+  }, [signOut]);
 
   const value = useMemo(
     () => ({ user: auth?.user ?? null, token: auth?.token ?? null, signIn, signOut }),
