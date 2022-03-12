@@ -1,19 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { clientsApi } from '../api';
+import ErrorMessage from '../components/ErrorMessage';
+import useApi from '../hooks/useApi';
 
 export default function ClientDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [client, setClient] = useState(null);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    clientsApi
-      .get(id)
-      .then(setClient)
-      .catch((err) => setError(err.message));
-  }, [id]);
+  const { data: client, loading, error } = useApi(() => clientsApi.get(id), [id]);
+  const [deleteError, setDeleteError] = useState(null);
 
   async function handleDelete() {
     if (!window.confirm(`Delete ${client.name}?`)) return;
@@ -21,12 +16,12 @@ export default function ClientDetailPage() {
       await clientsApi.remove(id);
       navigate('/clients');
     } catch (err) {
-      setError(err.response?.data?.message || err.message);
+      setDeleteError(err);
     }
   }
 
-  if (error) return <p className="error">{error}</p>;
-  if (!client) return <p>Loading…</p>;
+  if (loading) return <p>Loading…</p>;
+  if (error) return <ErrorMessage error={error} />;
 
   return (
     <div className="card">
@@ -41,6 +36,7 @@ export default function ClientDetailPage() {
           </button>
         </div>
       </div>
+      <ErrorMessage error={deleteError} />
       <dl className="meta">
         <dt>Email</dt>
         <dd>

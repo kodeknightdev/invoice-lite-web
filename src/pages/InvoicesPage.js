@@ -1,20 +1,11 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { invoicesApi } from '../api';
+import ErrorMessage from '../components/ErrorMessage';
 import InvoiceTable from '../components/InvoiceTable';
+import useApi from '../hooks/useApi';
 
 export default function InvoicesPage() {
-  const [invoices, setInvoices] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    invoicesApi
-      .list()
-      .then(setInvoices)
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
-  }, []);
+  const { data: invoices, loading, error } = useApi(() => invoicesApi.list(), []);
 
   return (
     <div>
@@ -26,9 +17,9 @@ export default function InvoicesPage() {
       </div>
 
       {loading && <p>Loading…</p>}
-      {error && <p className="error">{error}</p>}
-      {!loading && !error && invoices.length === 0 && <p className="muted">No invoices yet.</p>}
-      {invoices.length > 0 && <InvoiceTable invoices={invoices} />}
+      <ErrorMessage error={error} />
+      {invoices && invoices.length === 0 && <p className="muted">No invoices yet.</p>}
+      {invoices?.length > 0 && <InvoiceTable invoices={invoices} />}
     </div>
   );
 }

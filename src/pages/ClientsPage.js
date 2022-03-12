@@ -1,19 +1,10 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { clientsApi } from '../api';
+import ErrorMessage from '../components/ErrorMessage';
+import useApi from '../hooks/useApi';
 
 export default function ClientsPage() {
-  const [clients, setClients] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    clientsApi
-      .list()
-      .then(setClients)
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
-  }, []);
+  const { data: clients, loading, error } = useApi(() => clientsApi.list(), []);
 
   return (
     <div>
@@ -25,10 +16,10 @@ export default function ClientsPage() {
       </div>
 
       {loading && <p>Loading…</p>}
-      {error && <p className="error">{error}</p>}
-      {!loading && !error && clients.length === 0 && <p className="muted">No clients yet.</p>}
+      <ErrorMessage error={error} />
+      {clients && clients.length === 0 && <p className="muted">No clients yet.</p>}
 
-      {clients.length > 0 && (
+      {clients?.length > 0 && (
         <table className="table">
           <thead>
             <tr>

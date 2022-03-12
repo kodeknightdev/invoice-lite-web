@@ -1,31 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { invoicesApi } from '../api';
+import ErrorMessage from '../components/ErrorMessage';
 import StatusBadge from '../components/StatusBadge';
-import { formatMoney } from '../utils/money';
+import useApi from '../hooks/useApi';
 import { formatDate } from '../utils/dates';
+import { formatMoney } from '../utils/money';
 
 export default function InvoiceDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [invoice, setInvoice] = useState(null);
-  const [error, setError] = useState(null);
+  const { data: invoice, loading, error, setData } = useApi(() => invoicesApi.get(id), [id]);
+  const [actionError, setActionError] = useState(null);
   const [busy, setBusy] = useState(false);
-
-  useEffect(() => {
-    invoicesApi
-      .get(id)
-      .then(setInvoice)
-      .catch((err) => setError(err.message));
-  }, [id]);
 
   async function runAction(action) {
     setBusy(true);
-    setError(null);
+    setActionError(null);
     try {
-      setInvoice(await action(id));
+      setData(await action(id));
     } catch (err) {
-      setError(err.response?.data?.detail || err.message);
+      setActionError(err);
     } finally {
       setBusy(false);
     }
@@ -33,11 +28,16 @@ export default function InvoiceDetailPage() {
 
   async function handleDelete() {
     if (!window.confirm('Delete this draft invoice?')) return;
-    await invoicesApi.remove(id);
-    navigate('/invoices');
+    try {
+      await invoicesApi.remove(id);
+      navigate('/invoices');
+    } catch (err) {
+      setActionError(err);
+    }
   }
 
-  if (!invoice) return error ? <p className="error">{error}</p> : <p>Loading…</p>;
+  if (loading) return <p>Loading…</p>;
+  if (error) return <ErrorMessage error={error} />;
 
   const isDraft = invoice.status === 'Draft';
   const isSent = invoice.status === 'Sent';
@@ -82,7 +82,7 @@ export default function InvoiceDetailPage() {
         </div>
       </div>
 
-      {error && <p className="error">{error}</p>}
+      <ErrorMessage error={actionError} />
 
       <dl className="meta">
         <dt>Client</dt>
