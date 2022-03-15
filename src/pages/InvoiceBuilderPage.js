@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { clientsApi, invoicesApi } from '../api';
 import LineItemsEditor from '../components/LineItemsEditor';
+import { getErrorMessage, getFieldErrors } from '../utils/errors';
 import { formatMoney, invoiceTotal } from '../utils/money';
 
 const CURRENCIES = ['usd', 'eur', 'gbp', 'cad'];
@@ -22,6 +23,7 @@ export default function InvoiceBuilderPage() {
     lineItems: [{ description: '', quantity: 1, unitPrice: 0 }],
   });
   const [error, setError] = useState(null);
+  const [fieldErrors, setFieldErrors] = useState({});
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -54,6 +56,7 @@ export default function InvoiceBuilderPage() {
     e.preventDefault();
     setSaving(true);
     setError(null);
+    setFieldErrors({});
 
     const payload = {
       ...form,
@@ -69,7 +72,8 @@ export default function InvoiceBuilderPage() {
       const saved = id ? await invoicesApi.update(id, payload) : await invoicesApi.create(payload);
       navigate(`/invoices/${saved.id}`);
     } catch (err) {
-      setError(err.message);
+      setError(getErrorMessage(err));
+      setFieldErrors(getFieldErrors(err));
       setSaving(false);
     }
   }
@@ -107,6 +111,7 @@ export default function InvoiceBuilderPage() {
         <label>
           Due date
           <input type="date" value={form.dueDate} onChange={(e) => update('dueDate', e.target.value)} required />
+          {fieldErrors.dueDate && <span className="field-error">{fieldErrors.dueDate}</span>}
         </label>
       </div>
 
@@ -115,6 +120,7 @@ export default function InvoiceBuilderPage() {
         currency={form.currency}
         onChange={(items) => update('lineItems', items)}
       />
+      {fieldErrors.lineItems && <p className="field-error">{fieldErrors.lineItems}</p>}
       <p className="total">
         Total <strong>{formatMoney(invoiceTotal(form.lineItems), form.currency)}</strong>
       </p>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { authApi } from '../api';
 import { useAuth } from '../auth/AuthContext';
+import { getErrorMessage } from '../utils/errors';
 
 export default function RegisterPage() {
   const { token, signIn } = useAuth();
@@ -20,7 +21,7 @@ export default function RegisterPage() {
     try {
       signIn(await authApi.register(form));
     } catch (err) {
-      setError(err.response?.data?.message || 'Could not create your account.');
+      setError(getErrorMessage(err, 'Could not create your account.'));
       setSubmitting(false);
     }
   }

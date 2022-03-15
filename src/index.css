@@ -299,3 +299,11 @@ button.link {
 .topbar .user button.link {
   color: #93c5fd;
 }
+
+.field-error {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--danger);
+  font-size: 0.85rem;
+  font-weight: 400;
+}

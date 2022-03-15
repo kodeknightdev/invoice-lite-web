@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { clientsApi } from '../api';
+import { getErrorMessage, getFieldErrors } from '../utils/errors';
 
 const empty = { name: '', email: '', company: '', address: '' };
 
@@ -9,6 +10,7 @@ export default function ClientFormPage() {
   const navigate = useNavigate();
   const [form, setForm] = useState(empty);
   const [error, setError] = useState(null);
+  const [fieldErrors, setFieldErrors] = useState({});
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -26,14 +28,18 @@ export default function ClientFormPage() {
     e.preventDefault();
     setSaving(true);
     setError(null);
+    setFieldErrors({});
     try {
       const saved = id ? await clientsApi.update(id, form) : await clientsApi.create(form);
       navigate(`/clients/${saved.id}`);
     } catch (err) {
-      setError(err.message);
+      setError(getErrorMessage(err));
+      setFieldErrors(getFieldErrors(err));
       setSaving(false);
     }
   }
+
+  const fieldError = (name) => fieldErrors[name] && <span className="field-error">{fieldErrors[name]}</span>;
 
   return (
     <form className="card narrow" onSubmit={handleSubmit}>
@@ -41,18 +47,22 @@ export default function ClientFormPage() {
       <label>
         Name
         <input name="name" value={form.name} onChange={handleChange} required />
+        {fieldError('name')}
       </label>
       <label>
         Email
         <input name="email" type="email" value={form.email} onChange={handleChange} required />
+        {fieldError('email')}
       </label>
       <label>
         Company
         <input name="company" value={form.company} onChange={handleChange} />
+        {fieldError('company')}
       </label>
       <label>
         Address
         <textarea name="address" rows={3} value={form.address} onChange={handleChange} />
+        {fieldError('address')}
       </label>
       {error && <p className="error">{error}</p>}
       <div className="actions">
