@@ -29,3 +29,7 @@ export const invoicesApi = {
 export const paymentsApi = {
   createIntent: (invoiceId) => http.post(`/api/invoices/${invoiceId}/payment-intent`).then(data),
 };
+
+export const dashboardApi = {
+  summary: () => http.get('/api/dashboard').then(data),
+};

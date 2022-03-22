@@ -9,6 +9,9 @@ export default function Layout() {
       <header className="topbar">
         <span className="brand">Invoice Lite</span>
         <nav>
+          <NavLink to="/" end>
+            Dashboard
+          </NavLink>
           <NavLink to="/clients">Clients</NavLink>
           <NavLink to="/invoices">Invoices</NavLink>
         </nav>

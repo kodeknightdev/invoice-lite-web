@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import RequireAuth from './auth/RequireAuth';
+import DashboardPage from './pages/DashboardPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ClientsPage from './pages/ClientsPage';
@@ -24,7 +25,7 @@ function App() {
           </RequireAuth>
         }
       >
-        <Route index element={<Navigate to="/clients" replace />} />
+        <Route index element={<DashboardPage />} />
         <Route path="clients" element={<ClientsPage />} />
         <Route path="clients/new" element={<ClientFormPage />} />
         <Route path="clients/:id/edit" element={<ClientFormPage />} />
