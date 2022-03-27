@@ -1,11 +1,17 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { invoicesApi } from '../api';
 import ErrorMessage from '../components/ErrorMessage';
 import InvoiceTable from '../components/InvoiceTable';
+import Pagination from '../components/Pagination';
 import useApi from '../hooks/useApi';
 
+const PAGE_SIZE = 20;
+
 export default function InvoicesPage() {
-  const { data: invoices, loading, error } = useApi(() => invoicesApi.list(), []);
+  const [page, setPage] = useState(1);
+  const { data, loading, error } = useApi(() => invoicesApi.list({ page, pageSize: PAGE_SIZE }), [page]);
+  const invoices = data?.items ?? [];
 
   return (
     <div>
@@ -18,8 +24,11 @@ export default function InvoicesPage() {
 
       {loading && <p>Loading…</p>}
       <ErrorMessage error={error} />
-      {invoices && invoices.length === 0 && <p className="muted">No invoices yet.</p>}
-      {invoices?.length > 0 && <InvoiceTable invoices={invoices} />}
+      {data && invoices.length === 0 && <p className="muted">No invoices yet.</p>}
+      {invoices.length > 0 && <InvoiceTable invoices={invoices} />}
+      {data && (
+        <Pagination page={data.page} pageSize={data.pageSize} totalCount={data.totalCount} onChange={setPage} />
+      )}
     </div>
   );
 }
