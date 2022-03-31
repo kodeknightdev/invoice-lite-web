@@ -340,3 +340,19 @@ button.link {
   justify-content: flex-end;
   gap: 0.75rem;
 }
+
+.filters {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.filters select {
+  width: auto;
+  margin-top: 0;
+}
+
+h2 {
+  font-size: 1.1rem;
+  margin: 1.5rem 0 0.75rem;
+}

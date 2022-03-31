@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { clientsApi } from '../api';
+import { clientsApi, invoicesApi } from '../api';
 import ErrorMessage from '../components/ErrorMessage';
+import InvoiceTable from '../components/InvoiceTable';
 import useApi from '../hooks/useApi';
 
 export default function ClientDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data: client, loading, error } = useApi(() => clientsApi.get(id), [id]);
+  const { data: invoices } = useApi(() => invoicesApi.list({ clientId: id, pageSize: 100 }), [id]);
   const [deleteError, setDeleteError] = useState(null);
 
   async function handleDelete() {
@@ -47,6 +49,13 @@ export default function ClientDetailPage() {
         <dt>Address</dt>
         <dd>{client.address || '—'}</dd>
       </dl>
+
+      <h2>Invoices</h2>
+      {invoices?.items.length > 0 ? (
+        <InvoiceTable invoices={invoices.items} showClient={false} />
+      ) : (
+        <p className="muted">No invoices for this client yet.</p>
+      )}
     </div>
   );
 }

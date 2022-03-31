@@ -3,13 +3,13 @@ import StatusBadge from './StatusBadge';
 import { formatMoney } from '../utils/money';
 import { formatDate } from '../utils/dates';
 
-export default function InvoiceTable({ invoices }) {
+export default function InvoiceTable({ invoices, showClient = true }) {
   return (
     <table className="table">
       <thead>
         <tr>
           <th>Number</th>
-          <th>Client</th>
+          {showClient && <th>Client</th>}
           <th>Issued</th>
           <th>Due</th>
           <th>Status</th>
@@ -22,7 +22,7 @@ export default function InvoiceTable({ invoices }) {
             <td>
               <Link to={`/invoices/${inv.id}`}>{inv.number}</Link>
             </td>
-            <td>{inv.clientName}</td>
+            {showClient && <td>{inv.clientName}</td>}
             <td>{formatDate(inv.issueDate)}</td>
             <td>{formatDate(inv.dueDate)}</td>
             <td>
