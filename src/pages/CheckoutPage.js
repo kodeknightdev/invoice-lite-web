@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Elements } from '@stripe/react-stripe-js';
 import { invoicesApi, paymentsApi } from '../api';
@@ -11,9 +11,14 @@ export default function CheckoutPage() {
   const [invoice, setInvoice] = useState(null);
   const [clientSecret, setClientSecret] = useState(null);
   const [error, setError] = useState(null);
+  const intentRequested = useRef(false);
 
   useEffect(() => {
-    if (!stripePromise) return;
+    // Creating a PaymentIntent is not idempotent. StrictMode runs this effect
+    // twice in development, which left an orphaned intent in Stripe per visit.
+    if (!stripePromise || intentRequested.current) return;
+    intentRequested.current = true;
+
     Promise.all([invoicesApi.get(id), paymentsApi.createIntent(id)])
       .then(([inv, intent]) => {
         setInvoice(inv);
