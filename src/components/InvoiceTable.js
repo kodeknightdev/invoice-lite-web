@@ -26,7 +26,7 @@ export default function InvoiceTable({ invoices, showClient = true }) {
             <td>{formatDate(inv.issueDate)}</td>
             <td>{formatDate(inv.dueDate)}</td>
             <td>
-              <StatusBadge status={inv.status} />
+              <StatusBadge status={inv.status} overdue={inv.isOverdue} />
             </td>
             <td className="num">{formatMoney(inv.total, inv.currency)}</td>
           </tr>

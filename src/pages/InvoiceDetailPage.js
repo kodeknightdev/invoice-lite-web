@@ -46,7 +46,7 @@ export default function InvoiceDetailPage() {
     <div className="card">
       <div className="page-header">
         <h1>
-          {invoice.number} <StatusBadge status={invoice.status} />
+          {invoice.number} <StatusBadge status={invoice.status} overdue={invoice.isOverdue} />
         </h1>
         <div className="actions">
           {isDraft && (

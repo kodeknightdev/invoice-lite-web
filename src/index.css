@@ -247,6 +247,11 @@ button.link {
   color: #166534;
 }
 
+.badge-overdue {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
 .badge-void {
   background: #f3f4f6;
   color: #9ca3af;
